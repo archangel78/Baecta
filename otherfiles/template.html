@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detailed Report</title>
+
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./navbarStyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+
+<body>
+
+    <h1 id="main-heading">Browser artifact extractor and cyber threat analyzer Report</h1>
+
+    <h5 class="chromeVersion">
+        <div>profile</div>
+        <div>chrome_version</div>
+    </h5>
+    <h2 class="h1 section-title">Credential Analysis</h2>
+    <table id="content-table">
+        <thead>
+            <tr>
+                <th>URL</th>
+                <th>UserName</th>
+                <th>Password</th>
+                <th>Password Score</th>
+                <th>Password Advice</th>
+                <th>Time to crack</th>
+            </tr>
+        </thead>
+        <tbody>
+            credential_table
+        </tbody>
+    </table>
+
+    <h2 class="h1 section-title">Breached Websites - Your passwords saved in these websites are publicly availalble on the dark web</h2>
+    <table id="content-table">
+        <thead>
+            <tr>
+                <th>Breached Website</th>
+                <th>Username</th>
+            </tr>
+        </thead>
+        <tbody>
+            breached_table
+        </tbody>
+    </table>
+    <h2 class="h1 section-title">Malicious Url list - These url's in your browser history has been flagged as malicious or potentially malicious</h2>
+    <table id="content-table">
+        <thead>
+            <tr>
+                <th>URL</th>
+                <th>Risk Score</th>
+                <th>Phishing</th>
+                <th>Malware</th>
+                <th>Spamming</th>
+                <th>Suspicious</th>
+            </tr>
+        </thead>
+        <tbody>
+            malicious_table
+        </tbody>
+    </table>
+    <script type="text/javascript" src="pagechange.js"></script>
+    <script type="text/javascript" src="fillTable.js"></script>
+</body>
+
+</html>

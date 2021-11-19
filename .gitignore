@@ -1,0 +1,5 @@
+src/run_baecta.bat
+baecta.jar
+.vscode
+otherfiles/report.html
+history.db
