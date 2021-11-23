@@ -39,26 +39,6 @@ public class Analysis {
     }
 
     public static void checkMaliciousUrls() throws Exception{
-        // try {
-        //     Iterator<String> itr = UserData.getBrowserHistory().iterator();
-        //     int i = 0;
-        //     while (itr.hasNext()) {
-        //         System.out.print("[*] Scanning Malicious URL's: " + i + "/" + UserData.getBrowserHistory().size() + "\r");
-        //         String current_url = itr.next();
-        //         String output = getApiConnection(ipQualityApiEndpoint + current_url, "", "");
-
-        //         if (output != null) {
-        //             JSONParser parser = new JSONParser();
-        //             JSONObject root = (JSONObject) parser.parse(output);
-        //             DataWriter.addMaliciousUrl(root, current_url);
-        //         }
-        //         i++;
-        //     }
-        //     System.out.println("[*] Scanning Malicious URL's: " + i + "/" + UserData.getBrowserHistory().size());
-        // } catch (Exception e) {
-        //     System.out.println("[*] Exception occurred: " + e + "\n[*] Terminating");
-        //     System.exit(0);
-        // }
         Iterator<String> itr = UserData.getBrowserHistory().iterator();
         int noThreads = UserData.getBrowserHistory().size()/threadQuantity;
 
