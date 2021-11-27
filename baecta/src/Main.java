@@ -6,7 +6,6 @@ public class Main {
         if(Integer.parseInt(ChromeInstallation.getChromeVersion().substring(0, 2))>=80){
             System.out.println("[*] Chrome Version supported");
             ChromeDataCollector.getData();
-            // testFunction();
             Analysis.checkMaliciousUrls();
             Analysis.checkPublicDataBreaches();
             Analysis.calculatePasswordStrength();
