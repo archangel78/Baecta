@@ -40,8 +40,9 @@ public class Analysis {
 
     public static void checkMaliciousUrls() throws Exception{
         Iterator<String> itr = UserData.getBrowserHistory().iterator();
-        int noThreads = UserData.getBrowserHistory().size()/threadQuantity;
-
+        int noThreads = UserData.browserHistory.size()/threadQuantity;
+        if(noThreads == 0 )
+            noThreads = 1;
         for(int i = 0 ; i < noThreads; i++){
             ArrayList<String> browserHistoryList = new ArrayList<String>();
             int temp = threadQuantity;
@@ -61,7 +62,7 @@ public class Analysis {
             System.out.print("[*] Scanning Malicious URL's: " + maliciousUrlCounter + "/" + UserData.getBrowserHistory().size() + "\r");
             Thread.sleep(10);
         }
-        System.out.println("[*] Scanning Malicious URL's: " + maliciousUrlCounter + "/" + UserData.getBrowserHistory().size());
+        System.out.println("[*] Scanning Malicious URL's: " + UserData.getBrowserHistory().size() +"/" + UserData.getBrowserHistory().size());
     }
 
     public static void checkPublicDataBreaches() {
@@ -79,7 +80,7 @@ public class Analysis {
             while (emailIterator.hasNext()) {
                 System.out.print("[*] Checking credentials in public data breaches: " + i + "/" + emails.size() + "\r");
                 String email = emailIterator.next();
-                String output = getApiConnection(haveIBeenPawnedEndpoint + email, "hibp-api-key","39e46415998c43bd96995d54431c6460");
+                String output = getApiConnection(haveIBeenPawnedEndpoint + email, "hibp-api-key","398bba8c95cc4db4a23138af3037a496");
                 if (output != null) {
                     JSONParser parser = new JSONParser();
                     JSONArray root = (JSONArray) parser.parse(output);
@@ -108,13 +109,18 @@ public class Analysis {
         while (credential_Iterator.hasNext()) {
             Credential current_credential = credential_Iterator.next();
             String password = current_credential.getPassword();
-            String passwordReccomendation;
+            String passwordReccomendation, timeTakenToCrack;
             int totalPasswordScore, lengthScore, commonPasswordsScore;
+            long secondsToCrack;
             int [] varianceScores;
             int [] charTypeScores;
             
             if (password.length() == 0)
                 continue;
+            
+            secondsToCrack = (long) ((long) Math.pow(50, password.length())*0.000000001);
+
+            timeTakenToCrack = ConvertSectoDay(secondsToCrack);
             
             lengthScore = getPasswordLengthScore(password);
             varianceScores = getCharVarianceScores(password);
@@ -124,15 +130,18 @@ public class Analysis {
             if(commonPasswordsScore == 0){
                 totalPasswordScore = 0;
                 passwordReccomendation = "Your password was there in 2021 most common passwords. Change it immmediately";
+                timeTakenToCrack = "Less than 10 minutes";
             }
             else{
                 totalPasswordScore = lengthScore + varianceScores[0] + varianceScores[1] + charTypeScores[0] + commonPasswordsScore;
-                if(totalPasswordScore > 95)
+                if(totalPasswordScore > 95){
+                    totalPasswordScore = 100;
                     passwordReccomendation = "Your password is perfect";
+                }
                 else                
                     passwordReccomendation = getPasswordReccomendation(lengthScore, varianceScores, charTypeScores);
             }
-            DataWriter.addCredential(current_credential.getUsername(), password, totalPasswordScore, passwordReccomendation,"30 minutes", current_credential.getUrl());
+            DataWriter.addCredential(current_credential.getUsername(), password, totalPasswordScore, passwordReccomendation,timeTakenToCrack, current_credential.getUrl());
         }
     }
     private static int getPasswordLengthScore(String password){
@@ -231,5 +240,36 @@ public class Analysis {
         if(charTypeScores[4]<2)
             reccomendation += "<br>- Increasing number of numceric characters used";
         return reccomendation;
+    }
+    static String ConvertSectoDay(long n)
+    {
+        int years = (int) n/(24 * 3600 * 30 * 12);
+        n = n % (24 * 3600 * 30 * 12);
+
+        int months = (int) n/(24 * 3600 * 30);
+        n = n % (24 * 3600 * 30);
+
+        int day = (int) n / (24 * 3600);
+        n = n % (24 * 3600);
+        
+        int hour = (int) n / 3600;
+        n %= 3600;
+        
+        int minutes = (int) n / 60 ;
+        n %= 60;
+        
+        int seconds = (int) n;
+         
+        String timeTakenToCrack = years + " years " + months+" months " + day + " " + "days " + hour+ " " + "hours " + minutes + " "
+                           + "minutes " + seconds + " "
+                           + "seconds ";
+
+        if(years == 0 && months == 0 && day ==0)
+            return timeTakenToCrack.substring(24, timeTakenToCrack.length());
+        
+        if(years == 0 && months == 0)
+            return timeTakenToCrack.substring(17, timeTakenToCrack.length());
+
+        return timeTakenToCrack;
     }
 }

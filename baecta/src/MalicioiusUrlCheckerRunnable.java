@@ -11,7 +11,6 @@ public class MalicioiusUrlCheckerRunnable implements Runnable{
     }
     @Override
     public void run() {
-        // TODO Auto-generated method stub
         try{
             Iterator<String> itr = browserHistory.iterator();
             while(itr.hasNext()){
