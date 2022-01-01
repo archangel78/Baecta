@@ -1,6 +1,7 @@
 import java.nio.file.Path;
 import java.nio.file.Files;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.BufferedReader;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
@@ -8,28 +9,32 @@ import org.json.simple.JSONArray;
 public class DataWriter {
     private static String credentialTable = "", breachedTable = "", maliciousURLTable = "";
 
-    public static void generateHtmlReport() throws Exception{
+    public static void generateHtmlReport(){
         String templateHtmlText="";
+        try{
+            BufferedReader bufReader = new BufferedReader(new FileReader("otherfiles/template.html"));
+            String line = bufReader.readLine();
+            while (line != null) {
+                templateHtmlText+=line;
+                line = bufReader.readLine();
+            }
+            bufReader.close();
 
-        BufferedReader bufReader = new BufferedReader(new FileReader("otherfiles/template.html"));
-        String line = bufReader.readLine();
-        while (line != null) {
-            templateHtmlText+=line;
-            line = bufReader.readLine();
+            templateHtmlText = templateHtmlText.replace("credential_table", credentialTable);
+            templateHtmlText = templateHtmlText.replace("breached_table", breachedTable);
+            templateHtmlText = templateHtmlText.replace("malicious_table", maliciousURLTable);
+            templateHtmlText = templateHtmlText.replace("chrome_version", ChromeInstallation.getChromeVersion());
+            templateHtmlText = templateHtmlText.replace("profile", ChromeInstallation.getProfileName());
+
+            Path reportFilePath = Path.of("otherfiles/report.html");
+            Files.writeString(reportFilePath,templateHtmlText);
+
+            System.out.println("[*] Opening report in browser");
+            Runtime.getRuntime().exec("cmd /c start otherfiles/report.html");
+        }catch(IOException e){
+            System.out.println("[*] IOException occurred while generating report");
+            System.exit(0);
         }
-        bufReader.close();
-
-        templateHtmlText = templateHtmlText.replace("credential_table", credentialTable);
-        templateHtmlText = templateHtmlText.replace("breached_table", breachedTable);
-        templateHtmlText = templateHtmlText.replace("malicious_table", maliciousURLTable);
-        templateHtmlText = templateHtmlText.replace("chrome_version", ChromeInstallation.getChromeVersion());
-        templateHtmlText = templateHtmlText.replace("profile", ChromeInstallation.getProfileName());
-
-        Path reportFilePath = Path.of("otherfiles/report.html");
-        Files.writeString(reportFilePath,templateHtmlText);
-
-        System.out.println("[*] Opening report in browser");
-        Runtime.getRuntime().exec("cmd /c start otherfiles/report.html");
     }
 
     public static void addMaliciousUrl(JSONObject root, String current_url){

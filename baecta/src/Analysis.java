@@ -1,6 +1,7 @@
 import java.util.*;
 import java.net.URL;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.io.BufferedReader;
@@ -38,7 +39,7 @@ public class Analysis {
         return null;
     }
 
-    public static void checkMaliciousUrls() throws Exception{
+    public static void checkMaliciousUrls() {
         Iterator<String> itr = UserData.getBrowserHistory().iterator();
         int noThreads = UserData.browserHistory.size()/threadQuantity;
         if(noThreads == 0 )
@@ -60,7 +61,11 @@ public class Analysis {
 
         while(Analysis.maliciousUrlCounter < UserData.getBrowserHistory().size()){
             System.out.print("[*] Scanning Malicious URL's: " + maliciousUrlCounter + "/" + UserData.getBrowserHistory().size() + "\r");
-            Thread.sleep(10);
+            try{            
+                Thread.sleep(10);
+            }catch(InterruptedException e){
+                System.out.println("[*] Sleep interrupted");
+            }
         }
         System.out.println("[*] Scanning Malicious URL's: " + UserData.getBrowserHistory().size() +"/" + UserData.getBrowserHistory().size());
     }
@@ -103,7 +108,7 @@ public class Analysis {
         return matcher.matches();
     }
 
-    public static void calculatePasswordStrength() throws Exception{
+    public static void calculatePasswordStrength(){
         System.out.println("[*] Checking password strength");
         Iterator<Credential> credential_Iterator = UserData.getCredentials().iterator();
         while (credential_Iterator.hasNext()) {
@@ -118,10 +123,11 @@ public class Analysis {
             if (password.length() == 0)
                 continue;
             
-            secondsToCrack = (long) ((long) Math.pow(50, password.length())*0.000000001);
+            secondsToCrack = (long) ((long) Math.pow(50, password.length())*0.00000001);
 
             timeTakenToCrack = ConvertSectoDay(secondsToCrack);
-            
+            // System.out.println(password+": "+timeTakenToCrack+" "+secondsToCrack);
+
             lengthScore = getPasswordLengthScore(password);
             varianceScores = getCharVarianceScores(password);
             charTypeScores = getCharTypeScores(password);
@@ -209,19 +215,24 @@ public class Analysis {
         int [] charTypeScores = {charTypeScore, upper_count, lower_count, special_count, num_count};
         return charTypeScores;
     }
-    private static int getCommonPasswordsScore(String password) throws Exception{
-        BufferedReader bufReader = new BufferedReader(new FileReader("otherfiles/common_passwords.txt"));
-        ArrayList<String> commonPasswords = new ArrayList<>();
-        String line = bufReader.readLine();
-        while (line != null) {
-            commonPasswords.add(line);
-            line = bufReader.readLine();
-        }
-        bufReader.close();
-        if(commonPasswords.contains(password))
+    private static int getCommonPasswordsScore(String password) {
+        try{
+            BufferedReader bufReader = new BufferedReader(new FileReader("otherfiles/common_passwords.txt"));
+            ArrayList<String> commonPasswords = new ArrayList<>();
+            String line = bufReader.readLine();
+            while (line != null) {
+                commonPasswords.add(line);
+                line = bufReader.readLine();
+            }
+            bufReader.close();
+            if(commonPasswords.contains(password))
+                return 0;
+            else
+                return 5;
+        }catch(IOException e){
+            System.out.println("[*] IoException occurred, unable to calculate CP score\n[*] Final password scores may be innacurate");
             return 0;
-        else
-            return 5;
+        }
     }   
     private static String getPasswordReccomendation(int lengthScore, int[] varianceScores, int[] charTypeScores){
         String reccomendation = "You can improve your password score using the following methods: ";

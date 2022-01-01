@@ -1,1 +1,0 @@
-java --enable-preview -jar baecta.jar
