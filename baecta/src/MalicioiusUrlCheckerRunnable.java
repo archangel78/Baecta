@@ -24,9 +24,10 @@ public class MalicioiusUrlCheckerRunnable implements Runnable{
                 }
                 Analysis.maliciousUrlCounter++;
             }
-        }catch(Exception e){
-            System.out.println("[*] Exception occurred: "+e+"\n[*] Terminating");
-			System.exit(0);
+        }catch (org.json.simple.parser.ParseException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     

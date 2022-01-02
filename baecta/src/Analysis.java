@@ -126,7 +126,6 @@ public class Analysis {
             secondsToCrack = (long) ((long) Math.pow(50, password.length())*0.00000001);
 
             timeTakenToCrack = ConvertSectoDay(secondsToCrack);
-            // System.out.println(password+": "+timeTakenToCrack+" "+secondsToCrack);
 
             lengthScore = getPasswordLengthScore(password);
             varianceScores = getCharVarianceScores(password);
@@ -227,8 +226,7 @@ public class Analysis {
             bufReader.close();
             if(commonPasswords.contains(password))
                 return 0;
-            else
-                return 5;
+            return 5;
         }catch(IOException e){
             System.out.println("[*] IoException occurred, unable to calculate CP score\n[*] Final password scores may be innacurate");
             return 0;

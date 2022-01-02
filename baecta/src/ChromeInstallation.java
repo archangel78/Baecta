@@ -80,7 +80,7 @@ class ChromeInstallation{
 			System.out.println("[*] IOException occurred while reading chrome installation files");
 			System.exit(0);
 		} catch (ParseException e) {
-			System.out.println("[*] ParseException occurred while parsing local state json files");
+			System.out.println("[*] ParseException occurred while parsing local state json file");
 			System.exit(0);
 		}
 		
