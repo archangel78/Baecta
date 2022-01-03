@@ -29,6 +29,7 @@ public class DataWriter {
             Path reportFilePath = Path.of("otherfiles/report.html");
             Files.writeString(reportFilePath,templateHtmlText);
 
+            System.out.println("[*] Report Generated");
             System.out.println("[*] Opening report in browser");
             Runtime.getRuntime().exec("cmd /c start otherfiles/report.html");
         }catch(IOException e){

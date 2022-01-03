@@ -1,10 +1,10 @@
 import java.util.*;
 
 public class UserData {
-    static Set<String> browserHistory = new HashSet<String>(); 
+    static HashSet<String> browserHistory = new HashSet<String>(); 
     private static List<Credential> credentials = new ArrayList<Credential>();
 
-    public static void setBrowserHistory(Set<String> bHistory){
+    public static void setBrowserHistory(HashSet<String> bHistory){
         browserHistory = bHistory;
     }
     public static void setCredentials(List<Credential> creds){
