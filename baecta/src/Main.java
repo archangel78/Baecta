@@ -8,7 +8,7 @@ public class Main {
             ChromeDataCollector.getData();
             Analysis.checkMaliciousUrls();
             Analysis.checkPublicDataBreaches();
-            Analysis.calculatePasswordStrength();
+            PasswordAnalysis.calculatePasswordStrength();
             DataWriter.generateHtmlReport();
         }else{
             System.out.println("[*] Chrome Version not supported");
