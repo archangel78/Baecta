@@ -95,7 +95,7 @@ public class Analysis {
             System.out.println("[*] Checking credentials in public data breaches: " + i + "/" + emails.size());
         } catch (Exception e) {
             System.out.println("[*] Exception occurred: " + e + "\n[*] Terminating");
-            // System.exit(0);
+            System.exit(0);
         }
     }
 

